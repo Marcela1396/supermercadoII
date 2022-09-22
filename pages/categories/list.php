@@ -1,9 +1,13 @@
+<?php
+  include '../../bd/conexion.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Listado Productos </title>
+  <title>Listado Categorias </title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -189,22 +193,37 @@
             <!-- /.card-header -->
             <!-- form start -->
           </div>
-        
-          <div class="card-body table-responsive p-0">
-            <table class="table table-hover text-nowrap">
-              <thead>
+
+          <?php
+            $sql = "SELECT * FROM categorias";
+            $i = 0;
+
+            if($resultado = $conexion->query($sql)){
+              echo('
+                <div class="card-body table-responsive p-0">
+                  <table class="table table-hover text-nowrap">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>ID</th>
+                        <th>Nombre Categoria</th>
+                        <th>Detalle</th>
+                        <th>Opciones</th>
+                      </tr>
+                    </thead>
+              ');
+            while($row = $resultado->fetch_array()){
+              $i = $i + 1;
+              $id = $row['idCategoria'];
+              $nombre = $row['nombreCategoria'];
+              $detalle = $row['detalle'];
+              echo('
+                <tbody>
                 <tr>
-                  <th>ID</th>
-                  <th>Nombre Categoria</th>
-                  <th>Detalle</th>
-                  <th>Opciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>183</td>
-                  <td>Bebidas</td>
-                  <td>Todas las bebidas como jugos,gaseosas</td>
+                  <td>'.$i.'</td>
+                  <td>'.$id.'</td>
+                  <td>'.$nombre.'</td>
+                  <td>'.$detalle.'</td>
                   <td>
                      <a href="edit.php" class="btn btn-default">
                         <i class="fas fa-edit"></i>
@@ -213,9 +232,16 @@
                         <i class="fas fa-trash"></i>
                       </a>
                   </td>
-                </tr>
+                </tr>'
+              );
+            }
+            echo('
               </tbody>
             </table>
+            ');
+          }
+          ?>
+
           </div>
         </div>
       </div>
@@ -249,10 +275,9 @@
   <script src="../../dist/js/adminlte.min.js"></script>
 
   <!-- Page specific script -->
-  <script>
-  $(function () {
-    bsCustomFileInput.init();
-  });
-  </script>
+  <?php
+    mysqli_close($conexion);  // Cierra la conexión
+  ?>
+
 </body>
 </html>
